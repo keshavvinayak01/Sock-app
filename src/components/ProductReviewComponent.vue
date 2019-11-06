@@ -31,6 +31,8 @@
 </template>
 
 <script>
+import eventBus from './eventBus'
+
 export default {
   name: 'ProductReviewComponent',
   props: {
@@ -43,7 +45,7 @@ export default {
               review : this.review,
               rating : this.rating
             }
-            this.$emit(
+            eventBus.$emit(
               'review-submitted',
               productReview
             )
@@ -70,5 +72,4 @@ export default {
     }
   }
 }
-
 </script>
