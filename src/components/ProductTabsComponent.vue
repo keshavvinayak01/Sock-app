@@ -19,12 +19,11 @@
       </ul>
     </div>
     <ProductReviewComponent 
-    v-show="selectedTab === 'Make a Review'" /> 
+    v-show="selectedTab === 'Make a review'" /> 
   </div>
 </template>
 
 <script>
-import Vue from 'vue'
 import ProductReviewComponent from './ProductReviewComponent'
 export default {
   name: 'ProductTabsComponent',
