@@ -31,12 +31,9 @@
 </template>
 
 <script>
-import eventBus from './eventBus'
-
+import { eventBus } from '../main'
 export default {
   name: 'ProductReviewComponent',
-  props: {
-  },
   methods : {
       onSubmit() {
           if(this.name && this.review && this.rating) {
