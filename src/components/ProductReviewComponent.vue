@@ -12,7 +12,7 @@
         </p>
         <p>
             <label for="review">Review:</label>
-            <textarea id="review" v-model="review" required />
+            <textarea id="review" v-model="review" />
         </p>
         <p>
             <label for="rating">Rating:</label>
