@@ -22,39 +22,25 @@
       v-on:click="addToCart" 
       :disabled="!inStock"
       :class="{ disabledButton : !inStock }" >Add to Cart</button>
-      
+      <ProductTabsComponent :reviews="reviews" />
     </div>
-    <div>
-      <h2>Reviews</h2>
-      <p v-if="!reviews.length">There are no reviews yet.</p>
-      <ul>
-        <li v-for="review in reviews" :key="review.id">
-          <p> {{ review.name }} </p>
-          <p> Rating : {{ review.rating }} </p>
-          <p> {{ review.review }} </p>
-        </li>
-      </ul>
-    </div>
-    <ProductReviewComponent @review-submitted="addReview" />
+    
   </div>
 </template>
 
 <script>
-import ProductReviewComponent from './ProductReviewComponent.vue'
+import ProductTabsComponent from './ProductTabsComponent'
+import eventBus from './eventBus'
 export default {
   name: 'HomeComponent',
   components : {
-    ProductReviewComponent
+    ProductTabsComponent
   },
   props: {
     premium : Boolean,
     product: String,
   },
   methods : {
-    addReview(productReview) {
-      productReview.id = this.reviews.length
-      this.reviews.push(productReview)
-    },
     addToCart() {
       this.$emit('add-to-cart', this.variants[this.selectedVariant].variantId)
     },
@@ -80,6 +66,12 @@ export default {
     inStock() {
       return this.variants[this.selectedVariant].variantQuantity
     }
+  },
+  mounted(){
+    eventBus.$on('review-submitted', productReview => {
+      productReview.id = this.reviews.length
+      this.reviews.push(productReview)
+    })
   },
   data () {
     return {
