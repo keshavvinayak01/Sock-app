@@ -30,11 +30,11 @@
 
 <script>
 import ProductTabsComponent from './ProductTabsComponent'
-import eventBus from './eventBus'
+import { eventBus } from '../main'
 export default {
   name: 'HomeComponent',
   components : {
-    ProductTabsComponent
+    ProductTabsComponent,
   },
   props: {
     premium : Boolean,
