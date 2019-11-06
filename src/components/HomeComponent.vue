@@ -4,24 +4,105 @@
       <img v-bind:src="image" />
     </div>
     <div class="product-info">
-      <h1>{{ product }}</h1>
+      <h1>{{ title }}</h1>
+      <p v-if="inStock">In Stock</p>
+      <p v-else>Out of Stock</p>
+      <p>Shipping : {{shipping}}</p>
+      <ul>
+        <li v-for='detail in details' :key="detail"> {{detail}} </li>
+      </ul>
+      <div 
+      v-for="(variant, index) in variants" 
+      :key="variant.variantId"
+      class="color-box"
+      :style="{ backgroundColor : variant.variantColor }"
+      @mouseover="updateProduct(index)" >
+      </div>
+      <button 
+      v-on:click="addToCart" 
+      :disabled="!inStock"
+      :class="{ disabledButton : !inStock }" >Add to Cart</button>
+      
     </div>
+    <div>
+      <h2>Reviews</h2>
+      <p v-if="!reviews.length">There are no reviews yet.</p>
+      <ul>
+        <li v-for="review in reviews" :key="review.id">
+          <p> {{ review.name }} </p>
+          <p> Rating : {{ review.rating }} </p>
+          <p> {{ review.review }} </p>
+        </li>
+      </ul>
+    </div>
+    <ProductReviewComponent @review-submitted="addReview" />
   </div>
 </template>
 
 <script>
+import ProductReviewComponent from './ProductReviewComponent.vue'
 export default {
   name: 'HomeComponent',
+  components : {
+    ProductReviewComponent
+  },
   props: {
+    premium : Boolean,
     product: String,
   },
-  data : function() {
+  methods : {
+    addReview(productReview) {
+      productReview.id = this.reviews.length
+      this.reviews.push(productReview)
+    },
+    addToCart() {
+      this.$emit('add-to-cart', this.variants[this.selectedVariant].variantId)
+    },
+    updateProduct(index) {
+      this.selectedVariant = index
+    }
+  },
+  computed : {
+    shipping() {
+      if(this.premium) {
+        return "free"
+      }
+      else{
+        return "2.99"
+      }
+    },
+    title() {
+      return this.brand + ' ' + this.product
+    },
+    image(){
+      return this.variants[this.selectedVariant].variantImage
+    },
+    inStock() {
+      return this.variants[this.selectedVariant].variantQuantity
+    }
+  },
+  data () {
     return {
-      image : "https://www.vuemastery.com/images/challenges/vmSocks-green-onWhite.jpg"
+      brand : 'Vue Mastery',
+      reviews : [],
+      selectedVariant : 0,
+      details : ["90% cotton", "20% polyester", "Gender-neutral"],
+      variants : [
+        {
+          variantId : 2234,
+          variantColor : "green",
+          variantImage : "https://www.vuemastery.com/images/challenges/vmSocks-green-onWhite.jpg",
+          variantQuantity : 10
+        },  
+        {
+          variantId : 2235,
+          variantColor : "blue",
+          variantImage : "https://www.vuemastery.com/images/challenges/vmSocks-blue-onWhite.jpg",
+          variantQuantity : 0
+        }
+      ],
     }
   }
 }
 
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
